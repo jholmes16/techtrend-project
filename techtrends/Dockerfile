@@ -3,7 +3,7 @@ LABEL maintainer="Jahmaul Holmes"
 
 COPY . /techtrends
 WORKDIR /techtrends
-RUN pip install -r requirements.txt 
+RUN pip install -r ./requirements.txt 
 RUN python init_db.py
 
 EXPOSE 3111
