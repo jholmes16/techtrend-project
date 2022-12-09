@@ -1,3 +1,1 @@
-## Screenshots 
-
-Place any project screenshots in this directory.
+This a project for the Tech Trends cloud native architecture.
