@@ -1,8 +1,10 @@
 FROM python:3.8
 LABEL maintainer="Jahmaul Holmes"
 
+COPY techtrends /techtrends
+
 WORKDIR /techtrends
-COPY ./ .
+
 RUN pip install -r requirements.txt && python init_db.py
 
 EXPOSE 3111
