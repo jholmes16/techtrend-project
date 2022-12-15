@@ -2,6 +2,7 @@ import sqlite3
 import logging
 from flask import Flask, jsonify, json, render_template, request, url_for, redirect, flash
 from werkzeug.exceptions import abort
+import sys
 
 db_connect_count = 0
 
@@ -40,16 +41,16 @@ def index():
 def post(post_id):
     post = get_post(post_id)
     if post is None:
-        app.logger.info("A non-existing article was accessed and a 404 page was returned")
+        app.logger.debug("A non-existing article was accessed and a 404 page was returned")
         return render_template('404.html'), 404
     else:
-        app.logger.info(f"Article {post['title']} retrieved!")
+        app.logger.debug(f"Article {post['title']} retrieved!")
         return render_template('post.html', post=post)
 
 # Define the About Us page
 @app.route('/about')
 def about():
-    app.logger.info("The About Us page was retrieved")
+    app.logger.debug("The About Us page was retrieved")
     return render_template('about.html')
 
 # Define the post creation functionality 
@@ -67,7 +68,7 @@ def create():
                         (title, content))
             connection.commit()
             connection.close()
-            app.logger.info(f"A new article titled {title} was created")
+            app.logger.debug(f"A new article titled {title} was created")
             return redirect(url_for('index'))
 
     return render_template('create.html')
@@ -96,6 +97,10 @@ def metrics():
 
 # start the application on port 3111
 if __name__ == "__main__":
-    logging.basicConfig(filename='app.log', level=logging.INFO)
+    stdout_handler =  logging.StreamHandler(sys.stdout)
+    stderr_handler =  logging.StreamHandler(sys.stderr)
+    handlers = [stderr_handler, stdout_handler]
+    format_output = '%(asctime)s - %(levelname)s - %(message)s'
+    logging.basicConfig(format=format_output, level=logging.DEBUG, handlers=handlers)
 
     app.run(host='0.0.0.0', port='3111')
